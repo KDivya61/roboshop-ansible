@@ -1,0 +1,22 @@
+name: create roboshop conf in nginx
+  ansible.builtin.copy:
+    src: mongodb.repo
+    dest: /etc/yum.repos.d/mongo.repo
+
+name: Install the latest version of Mongodb
+  ansible.builtin.yum:
+    name: Mongodb
+    state: installed
+
+name: Replace old hostname with new hostname (requires Ansible >= 2.4)
+  ansible.builtin.replace:
+    path: /etc/mongod.conf
+    regexp: '127.0.0.1'
+    replace: '0.0.0.0'
+    
+name: start and enable Mongodb
+  ansible.builtin.systemd:
+  name: Mongodb
+  start: restarted
+  enabled: yes
+    

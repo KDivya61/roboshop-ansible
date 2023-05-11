@@ -1,0 +1,32 @@
+name: Install the latest version of nginx
+  ansible.builtin.yum:
+    name: nginx
+    state: installed
+    
+name: remove old contents
+  ansible.builtin.file:
+    path: /usr/share/nginx/html
+    state: absent
+    
+name: create application directory
+  ansible.builtin.file:
+    path: /usr/share/nginx/html
+    state: directory
+    
+name: downlaod and unzip file
+  ansible.builtin.unarchive:
+    src:  https://roboshop-artifacts.s3.amazonaws.com/frontend.zip
+    dest: /usr/share/nginx/html
+    remote_src: yes
+
+name: create roboshop conf in nginx
+  ansible.builtin.template:
+    src:  roboshop.conf
+    dest:  /etc/nginx/default.d/roboshop.conf
+    
+name: start and enable nginx
+  ansible.builtin.systemd:
+  name: nginx
+  start: restarted
+  enabled: yes
+    

@@ -1,0 +1,23 @@
+
+name: Install maven 
+  ansible.builtin.yum:
+    name: maven 
+    state: installed
+    
+    name: setup app_prereq
+  ansible.import_tasks:
+  file: app_prereq.yml
+  
+  
+   name: Install maven dependencies
+   ansible.builtin.shell: mvn clean package;mv target/${{component}}-1.0.jar ${{component}}.jar
+   args:
+   chdir: /app # the above shell shlould run in app directory so we used chdir.
+   name: load schema
+  ansible.import_tasks:
+  file: schema-setup.yml
+  when: schema_type is defined
+  
+  name: systemd setup
+  ansible.import_tasks:
+  file: systemd-setup.yml

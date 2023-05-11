@@ -1,4 +1,5 @@
 name: run roboshop setup
 hosts: all
+become: true # we are giving this coz it makes/allows code to run as root user. of not use this root user error will come
 roles:
     "{{ role_name }}"

@@ -1,0 +1,23 @@
+name: copy mysql repo
+  ansible.builtin.copy:
+    src:  /Mysql.repo
+    dest:  /etc/yum.repos.d/Mysql.repo
+    
+Name: disable mysql
+ansible.builtin.shell: dnf module disable mysql -
+
+name: Install mysql
+  ansible.builtin.yum:
+    name:  mysql-community-server
+    state: installed
+    
+name: start and enable mysql
+  ansible.builtin.systemd:
+  name: mysql
+  start: restarted
+  enabled: yes
+  
+name: set root password
+  ansible.builtin.systemd: mysql_secure_installation --set-root-pass Roboshop@1
+  ignore_errors: yes # while re-running this itd fail so when given this it will ignore the errors and run.
+  

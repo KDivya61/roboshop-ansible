@@ -1,0 +1,34 @@
+name: demo
+debug:
+ msg: Nodejs
+ # now we need to load the nodejs file when we run aganist cart. now new functionality comes called "import roles". using this we achieve it. refer to cart/taks/main.yml file.
+ 
+ 
+ Name: disable mysql
+ansible.builtin.shell: curl -sL https://rpm.nodesource.com/setup_lts.x | bash
+
+name: Install nodejs 
+  ansible.builtin.yum:
+    name: nodejs 
+    state: installed
+    
+name: setup app_prereq
+  ansible.import_tasks:
+  file: app_prereq.yml
+  
+   name: Install nodejs dependencies
+  community.general.npm:
+    path: /app
+    
+    name: load schema
+  ansible.import_tasks:
+  file: schema-setup.yml
+  when: schema_type is defined
+  
+  name: systemd setup
+  ansible.import_tasks:
+  file: systemd-setup.yml
+  
+  
+
+    

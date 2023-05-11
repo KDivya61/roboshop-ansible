@@ -1,0 +1,16 @@
+- name: Install python 
+  ansible.builtin.yum:
+    name: 
+        -python36
+        -gcc
+        -python3-devel
+    state: installed
+    
+    name: setup app_prereq
+  ansible.import_tasks:
+  file: app_prereq.yml
+  
+  name: Install  python dependencies
+  ansible.builtin.pip:
+    requirements: /app/requirements.txt
+    executable: pip3.6
